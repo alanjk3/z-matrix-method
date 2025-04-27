@@ -291,11 +291,11 @@ def exemplo_sistema_4_barras():
         for j in range(4):
             real = Y_bus[i, j].real
             imag = Y_bus[i, j].imag
-            sign = "+" if imag >= 0 else ""
-            row_str += f"{real:.6f}{sign}{imag:.6f}j  "
+            row_str += f"{real:.6f}{'+' if imag >= 0 else ''}{imag:.6f}j  "
         print(row_str)
-    
-    # Calcular e imprimir a matriz Z_bus (inversa da Y_bus reduzida)
+
+
+        # Calcular e imprimir a matriz Z_bus (inversa da Y_bus reduzida)
     # Identifica a barra slack
     slack_bus = 1
     # Índices das barras não-slack
@@ -305,7 +305,7 @@ def exemplo_sistema_4_barras():
     idx_map = {b: i for i, b in enumerate(barras)}
     idx_nao_slack = [idx_map[b] for b in barras_nao_slack]
     
-    # Extrair a parte da Y_bus que corresponde às barras não-slack
+    # Extrair a parte da Y_bus que corresponde às barras não-slackS
     Y_reduzida = Y_bus[np.ix_(idx_nao_slack, idx_nao_slack)]
     
     # Calcular a matriz Z_bus (inversa da Y_bus reduzida)
@@ -326,10 +326,9 @@ def exemplo_sistema_4_barras():
     tolerancia = 0.0010
     
     # Criar instância do solver
-    solver = MetodoMatrizZ(Y_bus, barras, linhas, barras_tipo, potencias, v_inicial, tol=tolerancia)
+    solver = MetodoMatrizZdetailed(Y_bus, barras, linhas, barras_tipo, potencias, v_inicial, tol=tolerancia)
     
     # Resolver usando método da matriz Z com substituição em bloco
-    print("\n\n===== MÉTODO DA MATRIZ Z - SUBSTITUIÇÃO EM BLOCO =====")
     v_bloco, v_history_bloco, iteracoes_bloco = solver.substituicao_em_bloco()
     fluxos_bloco = solver.calcular_fluxos(v_bloco)
     
@@ -338,7 +337,6 @@ def exemplo_sistema_4_barras():
     solver.plotar_convergencia(v_history_bloco, "Substituição em Bloco")
     
     # Resolver usando método da matriz Z com substituição direta
-    print("\n\n===== MÉTODO DA MATRIZ Z - SUBSTITUIÇÃO DIRETA =====")
     v_direta, v_history_direta, iteracoes_direta = solver.substituicao_direta()
     fluxos_direta = solver.calcular_fluxos(v_direta)
     
