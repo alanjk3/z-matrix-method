@@ -395,9 +395,9 @@ def exemplo_sistema_4_barras():
     # Exemplo: Barra 2 com 60% potência constante, 30% corrente constante, 10% impedância constante
     load_models = {
         1: {'P': 1.0, 'I': 0.0, 'Z': 0.0},  # Barra slack (não usado)
-        2: {'P': 0.6, 'I': 0.3, 'Z': 0.1},  # Modelo misto
-        3: {'P': 0.0, 'I': 1.0, 'Z': 0.0},  # 100% corrente constante
-        4: {'P': 0.0, 'I': 0.0, 'Z': 1.0}   # 100% impedância constante
+        2: {'P': 1.0, 'I': 0.0, 'Z': 0.0},  # Modelo ZIP
+        3: {'P': 1.0, 'I': 0.0, 'Z': 0.0},  # 100% corrente constante
+        4: {'P': 1.0, 'I': 0.0, 'Z': 0.0}  # 100% impedância constante
     }
     
     # Linhas (conexões entre barras)
