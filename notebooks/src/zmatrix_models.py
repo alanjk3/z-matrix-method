@@ -362,7 +362,7 @@ class MetodoMatrizZdetailed:
         plt.xlabel('Iteração')
         plt.ylabel('Magnitude da Tensão (pu)')
         plt.grid(True)
-        plt.legend()
+        plt.legend()  
         plt.tight_layout()
         plt.show()
 
@@ -577,7 +577,7 @@ def exemplo_sistema_4_barras():
     plt.title('Comparação das Magnitudes de Tensão para Diferentes Modelos de Carga')
     plt.xticks(x + bar_width*1.5, [f'Barra {b}' for b in barras])
     plt.grid(True, axis='y', alpha=0.3)
-    plt.legend()
+    plt.legend(loc='lower right') 
     plt.tight_layout()
     plt.show()
 
