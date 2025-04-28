@@ -113,9 +113,10 @@ class MetodoMatrizZdetailed:
         i_ci = 0j
         if modelo['I'] > 0:
             v_mag = abs(v)
+            v_nom = abs(self.v_inicial[barra])
             if v_mag > 1e-6:  # Evita divisão por zero
-                # I = (S*/|V|) * (V/|V|) = (S* * V) / (|V|²)
-                i_ci = conj(s_total * modelo['I']) * v / (v_mag * v_mag)
+                # I = (S*/V_nom) * (V/|V|)
+                i_ci = conj(s_total * modelo['I'] / v_nom) * (v / v_mag)
         
         # Impedância constante (CZ)
         i_cz = 0j
@@ -508,19 +509,19 @@ def exemplo_sistema_4_barras():
             4: {'P': 1.0, 'I': 0.0, 'Z': 0.0}
         }},
         {"name": "100% Corrente Constante", "models": {
-            1: {'P': 1.0, 'I': 0.0, 'Z': 0.0},
+            1: {'P': 0.0, 'I': 1.0, 'Z': 0.0},
             2: {'P': 0.0, 'I': 1.0, 'Z': 0.0},
             3: {'P': 0.0, 'I': 1.0, 'Z': 0.0},
             4: {'P': 0.0, 'I': 1.0, 'Z': 0.0}
         }},
         {"name": "100% Impedância Constante", "models": {
-            1: {'P': 1.0, 'I': 0.0, 'Z': 0.0},
+            1: {'P': 0.0, 'I': 0.0, 'Z': 1.0},
             2: {'P': 0.0, 'I': 0.0, 'Z': 1.0},
             3: {'P': 0.0, 'I': 0.0, 'Z': 1.0},
             4: {'P': 0.0, 'I': 0.0, 'Z': 1.0}
         }},
         {"name": "Modelo Misto (ZIP)", "models": {
-            1: {'P': 1.0, 'I': 0.0, 'Z': 0.0},
+            1: {'P': 0.4, 'I': 0.3, 'Z': 0.3},
             2: {'P': 0.4, 'I': 0.3, 'Z': 0.3},
             3: {'P': 0.4, 'I': 0.3, 'Z': 0.3},
             4: {'P': 0.4, 'I': 0.3, 'Z': 0.3}
