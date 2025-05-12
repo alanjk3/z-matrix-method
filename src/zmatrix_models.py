@@ -93,38 +93,23 @@ class MetodoMatrizZdetailed:
         return self.c
     
     def calcula_corrente_injetada(self, barra, v):
-        """
-        Calcula a corrente injetada em uma barra considerando múltiplos modelos de carga.
-        
-        Componentes:
-        - Potência constante: I_cp = S*/V*
-        - Corrente constante: I_ci = (S*/|V|) * (V/|V|)
-        - Impedância constante: I_cz = Y * V
-        """
-        s_total = self.potencias[barra]
+        s_nominal = self.potencias[barra]
         modelo = self.load_models[barra]
+        v_mag = abs(v)
+        v_nom = abs(self.v_inicial[barra])
         
-        # Potência constante (CP)
-        i_cp = 0j
-        if modelo['P'] > 0:
-            i_cp = conj(s_total * modelo['P'] / v)
+        # Update power based on voltage and ZIP components
+        s_p = s_nominal * modelo['P']  # Constant power
+        s_i = s_nominal * modelo['I'] * (v_mag / v_nom)  # Constant current - scales with |V|
+        s_z = s_nominal * modelo['Z'] * (v_mag / v_nom)**2  # Constant impedance - scales with |V|²
         
-        # Corrente constante (CI)
-        i_ci = 0j
-        if modelo['I'] > 0:
-            v_mag = abs(v)
-            v_nom = abs(self.v_inicial[barra])
-            if v_mag > 1e-6:  # Evita divisão por zero
-                # I = (S*/V_nom) * (V/|V|)
-                i_ci = conj(s_total * modelo['I'] / v_nom) * (v / v_mag)
+        # Total updated power
+        s_updated = s_p + s_i + s_z
         
-        # Impedância constante (CZ)
-        i_cz = 0j
-        if modelo['Z'] > 0:
-            i_cz = self.y_carga_equiv[barra] * v
+        # Calculate current using the updated power
+        i_total = conj(s_updated / v)
         
-        # Retorna a soma das correntes
-        return i_cp + i_ci + i_cz
+        return i_total
     
     def substituicao_em_bloco(self):
         """Implementa o método da matriz Z com substituição em bloco"""
